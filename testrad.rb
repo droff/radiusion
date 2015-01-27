@@ -2,9 +2,9 @@ require 'rubygems'
 require_relative 'lib/radiusion'
 include Radiusion
 
-HOST    = "127.0.0.1"
+HOST    = "192.168.1.22"
 PORT    = 1812
-SECRET  = "testing123"
+SECRET  = "s3cret"
 USER    = "droff"
 PASS    = "555666"
 
@@ -19,4 +19,5 @@ AUTH_ID = "\000" * 16
 
 radius = Protocol.new(HOST, PORT, 1)
 radius.send(@packet.pack)
-p radius.recv
+data = radius.recv
+puts @packet.unpack(data[0]) if data

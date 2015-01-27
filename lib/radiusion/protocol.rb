@@ -15,10 +15,11 @@ module Radiusion
 
     def recv
       if select([@socket], nil, nil, @timeout).nil?
-        "unable to receive"
+        data = nil
       else
-        @socket.recvfrom(4096)
+        data = @socket.recvfrom(4096)
       end
+      data
     end
   end
 end

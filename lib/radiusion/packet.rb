@@ -23,7 +23,7 @@ module Radiusion
     end
 
     def set_attribute(name, value)
-      dict = Dictionary.find(name)
+      dict = Dictionary.find_by_name(name)
       code = dict[0]
       value =
         case dict[1]
@@ -38,7 +38,7 @@ module Radiusion
     end
 
     def set_attribute_cipher(name, value, secret)
-      dict = Dictionary.find(name)
+      dict = Dictionary.find_by_name(name)
       code = dict[0]
       value = encode(value, secret)
       length = value.size
@@ -54,7 +54,14 @@ module Radiusion
         attributes_string += attribute
       end
 
-      [CODES[@code], @id, attributes_string.size + 20, @authenticator, attributes_string].pack(T_PACKET)
+      [CODES[@code], @id, attributes_string.size + 20,
+       @authenticator, attributes_string].pack(T_PACKET)
+    end
+
+    def unpack(data)
+      @code, @id, length, @authenticator, attributes_string = data.unpack(T_PACKET)
+      @code = CODES.key(@code)
+      @code
     end
 
     private
